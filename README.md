@@ -7,3 +7,5 @@ React Native
 
 Linguagens
 Javascript
+Axios
+
