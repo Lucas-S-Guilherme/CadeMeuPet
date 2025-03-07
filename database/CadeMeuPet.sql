@@ -1,3 +1,7 @@
+CREATE DATABASE cademeupet;
+#DROP DATABASE cademeupet;
+use cademeupet;
+
 CREATE TABLE Usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -32,7 +36,7 @@ CREATE TABLE Animais (
 INSERT INTO Animais (nome, tipo, foto, descricao, status, ultima_localizacao, nome_dono, contato_dono, usuario_id, created_at)
 VALUES
 ('Rex', 'cachorro', LOAD_FILE('/caminho/para/foto_rex.jpg'), 'Cachorro da raça Labrador, cor preta.', 'perdido', 'Rua das Flores, 123', 'Ana Costa', '11999998888', 1, NOW()),
-('Mimi', 'gato', LOAD_FILE('/caminho/para/foto_mimi.jpg'), 'Gato siamês, muito dócil.', 'encontrado', 'Avenida Paulista, 1000', NULL, NULL, 2, NOW()),
+('Mimi', 'gato', LOAD_FILE('/caminho/para/foto_mimi.jpg'), 'Gato siamês, muito dócil.', 'encontrado', 'Avenida Paulista, 1000', 'Joaozinho', '69990707070', 2, NOW()),
 ('Loro', 'papagaio', LOAD_FILE('/caminho/para/foto_loro.jpg'), 'Papagaio verde, fala algumas palavras.', 'em_processo_adocao', 'Praça da Sé, 50', 'Pedro Alves', '11988887777', 3, NOW());
 
 CREATE TABLE Avistamentos (

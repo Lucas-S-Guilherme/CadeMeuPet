@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import axios from 'axios';
+import api from '../services/api'; // Importando o Axios configurado
 
 const TelaLogin = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -8,7 +8,7 @@ const TelaLogin = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/login', { email, senha });
+      const response = await api.post('/login', { email, senha });
       if (response.data.success) {
         navigation.navigate('Home');
       } else {
@@ -36,12 +36,6 @@ const TelaLogin = ({ navigation }) => {
         onChangeText={setSenha}
       />
       <Button title="Entrar" onPress={handleLogin} />
-      <Text
-        style={styles.link}
-        onPress={() => navigation.navigate('EsqueciSenha')}
-      >
-        Esqueci minha senha
-      </Text>
     </View>
   );
 };
@@ -63,10 +57,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
-  },
-  link: {
-    color: 'blue',
-    marginTop: 10,
   },
 });
 

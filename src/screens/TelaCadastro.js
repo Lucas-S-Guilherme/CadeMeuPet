@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import axios from 'axios';
+import api from '../services/api';
 
 const TelaCadastro = ({ navigation }) => {
   const [nome, setNome] = useState('');
@@ -9,29 +9,25 @@ const TelaCadastro = ({ navigation }) => {
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [telefone, setTelefone] = useState('');
 
-  const handleCadastro = async () => {
-    if (senha !== confirmarSenha) {
-      Alert.alert('Erro', 'As senhas não coincidem.');
-      return;
-    }
 
-    try {
-      const response = await axios.post('http://localhost:3000/cadastro', {
-        nome,
-        email,
-        senha,
-        telefone,
-      });
-      if (response.data.success) {
-        Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
-        navigation.navigate('Login');
-      } else {
-        Alert.alert('Erro', 'Ocorreu um erro ao cadastrar.');
-      }
-    } catch (error) {
-      Alert.alert('Erro', 'Ocorreu um erro ao tentar cadastrar.');
+const handleCadastro = async () => {
+  if (senha !== confirmarSenha) {
+    Alert.alert('Erro', 'As senhas não coincidem.');
+    return;
+  }
+
+  try {
+    const response = await api.post('/cadastro', { nome, email, senha, telefone });
+    if (response.data.success) {
+      Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
+      navigation.navigate('Login');
+    } else {
+      Alert.alert('Erro', 'Ocorreu um erro ao cadastrar.');
     }
-  };
+  } catch (error) {
+    Alert.alert('Erro', 'Ocorreu um erro ao tentar cadastrar.');
+  }
+};
 
   return (
     <View style={styles.container}>
