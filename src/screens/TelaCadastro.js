@@ -22,7 +22,7 @@ const TelaCadastro = ({ navigation }) => {
       console.log('Resposta da API:', response.data); // Log da resposta da API
       if (response.data.success) {
         Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
-        navigation.navigate('Login');
+        navigation.navigate('TelaLogin');
       } else {
         Alert.alert('Erro', 'Ocorreu um erro ao cadastrar.');
       }
