@@ -5,7 +5,7 @@ import api from '../services/api';
 
 const CadastroAnimalPerdido = ({ navigation }) => {
   const [nome, setNome] = useState('');
-  const [tipo, setTipo] = useState('cachorro'); // Valor inicial do dropdown
+  const [tipo, setTipo] = useState(''); // Estado inicial vazio
   const [descricao, setDescricao] = useState('');
   const [ultimaLocalizacao, setUltimaLocalizacao] = useState('');
   const [nomeDono, setNomeDono] = useState('');
@@ -81,6 +81,7 @@ const CadastroAnimalPerdido = ({ navigation }) => {
           onValueChange={(itemValue) => setTipo(itemValue)}
           style={styles.picker}
         >
+          <Picker.Item label="Selecione o tipo de animal" value="" /> {/* Placeholder */}
           <Picker.Item label="Cachorro" value="cachorro" />
           <Picker.Item label="Gato" value="gato" />
           <Picker.Item label="Papagaio" value="papagaio" />
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    height: 40,
+    height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: '100%',
-    height: 40,
+    height: 50,
   },
   botaoSalvar: {
     backgroundColor: '#ff9800',
