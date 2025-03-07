@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import api from '../services/api'; // Importando o Axios configurado
+import api from '../services/api';
 
 const TelaLogin = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -8,7 +8,7 @@ const TelaLogin = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-      const response = await api.post('/login', { email, senha });
+      const response = await api.post('/api/login', { email, senha });
       if (response.data.success) {
         navigation.navigate('Home');
       } else {
