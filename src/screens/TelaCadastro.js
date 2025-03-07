@@ -8,10 +8,47 @@ const TelaCadastro = ({ navigation }) => {
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [telefone, setTelefone] = useState('');
+  const [erros, setErros] = useState({});
+
+  const validarEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const validarTelefone = (telefone) => {
+    const regex = /^\d{10,11}$/; // Aceita telefones com 10 ou 11 dígitos
+    return regex.test(telefone);
+  };
+
+  const validarCampos = () => {
+    const novosErros = {};
+
+    if (nome.length < 3) {
+      novosErros.nome = 'O nome deve ter pelo menos 3 caracteres.';
+    }
+
+    if (!validarEmail(email)) {
+      novosErros.email = 'Por favor, insira um e-mail válido.';
+    }
+
+    if (senha.length < 6) {
+      novosErros.senha = 'A senha deve ter pelo menos 6 caracteres.';
+    }
+
+    if (senha !== confirmarSenha) {
+      novosErros.confirmarSenha = 'As senhas não coincidem.';
+    }
+
+    if (!validarTelefone(telefone)) {
+      novosErros.telefone = 'Por favor, insira um telefone válido.';
+    }
+
+    setErros(novosErros);
+    return Object.keys(novosErros).length === 0; // Retorna true se não houver erros
+  };
 
   const handleCadastro = async () => {
-    if (senha !== confirmarSenha) {
-      Alert.alert('Erro', 'As senhas não coincidem.');
+    if (!validarCampos()) {
       return;
     }
 
@@ -49,38 +86,63 @@ const TelaCadastro = ({ navigation }) => {
       </Text>
 
       {/* Campos do formulário */}
-      <TextInput
-        style={styles.input}
-        placeholder="Nome"
-        value={nome}
-        onChangeText={setNome}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="E-mail"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        secureTextEntry
-        value={senha}
-        onChangeText={setSenha}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirmar Senha"
-        secureTextEntry
-        value={confirmarSenha}
-        onChangeText={setConfirmarSenha}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Telefone"
-        value={telefone}
-        onChangeText={setTelefone}
-      />
+      <View style={styles.campoContainer}>
+        <Text style={styles.label}>Nome</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite seu nome"
+          value={nome}
+          onChangeText={setNome}
+        />
+        {erros.nome && <Text style={styles.erro}>{erros.nome}</Text>}
+      </View>
+
+      <View style={styles.campoContainer}>
+        <Text style={styles.label}>E-mail</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite seu e-mail"
+          value={email}
+          onChangeText={setEmail}
+        />
+        {erros.email && <Text style={styles.erro}>{erros.email}</Text>}
+      </View>
+
+      <View style={styles.campoContainer}>
+        <Text style={styles.label}>Senha</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite sua senha"
+          secureTextEntry
+          value={senha}
+          onChangeText={setSenha}
+        />
+        {erros.senha && <Text style={styles.erro}>{erros.senha}</Text>}
+      </View>
+
+      <View style={styles.campoContainer}>
+        <Text style={styles.label}>Confirmar Senha</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Confirme sua senha"
+          secureTextEntry
+          value={confirmarSenha}
+          onChangeText={setConfirmarSenha}
+        />
+        {erros.confirmarSenha && <Text style={styles.erro}>{erros.confirmarSenha}</Text>}
+      </View>
+
+      <View style={styles.campoContainer}>
+        <Text style={styles.label}>Telefone</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite seu telefone"
+          value={telefone}
+          onChangeText={setTelefone}
+          keyboardType="phone-pad"
+        />
+        {erros.telefone && <Text style={styles.erro}>{erros.telefone}</Text>}
+      </View>
 
       {/* Botão de cadastro */}
       <TouchableOpacity style={styles.botaoCadastrar} onPress={handleCadastro}>
@@ -117,13 +179,21 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     fontStyle: 'italic',
   },
+  campoContainer: {
+    width: '100%',
+    marginBottom: 10,
+  },
+  label: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 5,
+  },
   input: {
     width: '100%',
     height: 40,
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
-    marginBottom: 10,
     paddingHorizontal: 10,
     backgroundColor: '#fff',
   },
@@ -144,6 +214,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  erro: {
+    color: 'red',
+    fontSize: 14,
+    marginTop: 5,
   },
 });
 

@@ -5,8 +5,33 @@ import api from '../services/api';
 const TelaLogin = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [erros, setErros] = useState({});
+
+  const validarEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const validarCampos = () => {
+    const novosErros = {};
+
+    if (!validarEmail(email)) {
+      novosErros.email = 'Por favor, insira um e-mail válido.';
+    }
+
+    if (senha.length < 6) {
+      novosErros.senha = 'A senha deve ter pelo menos 6 caracteres.';
+    }
+
+    setErros(novosErros);
+    return Object.keys(novosErros).length === 0; // Retorna true se não houver erros
+  };
 
   const handleLogin = async () => {
+    if (!validarCampos()) {
+      return;
+    }
+
     try {
       const response = await api.post('/login', { email, senha });
       console.log('Resposta da API:', response.data); // Log da resposta
@@ -15,7 +40,14 @@ const TelaLogin = ({ navigation }) => {
         Alert.alert('Sucesso', 'Login realizado com sucesso!');
         navigation.navigate('Home'); // Redireciona para a tela inicial
       } else {
-        Alert.alert('Erro', 'E-mail ou senha incorretos.');
+        // Verifica se o erro é de e-mail ou senha
+        if (response.data.message === 'E-mail não encontrado') {
+          setErros({ email: 'E-mail não cadastrado.' });
+        } else if (response.data.message === 'Senha incorreta') {
+          setErros({ senha: 'Senha incorreta.' });
+        } else {
+          Alert.alert('Erro', 'Ocorreu um erro ao tentar fazer login.');
+        }
       }
     } catch (error) {
       console.error('Erro na requisição:', error); // Log do erro
@@ -40,19 +72,28 @@ const TelaLogin = ({ navigation }) => {
       </Text>
 
       {/* Campos do formulário */}
-      <TextInput
-        style={styles.input}
-        placeholder="E-mail"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        secureTextEntry
-        value={senha}
-        onChangeText={setSenha}
-      />
+      <View style={styles.campoContainer}>
+        <Text style={styles.label}>E-mail</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite seu e-mail"
+          value={email}
+          onChangeText={setEmail}
+        />
+        {erros.email && <Text style={styles.erro}>{erros.email}</Text>}
+      </View>
+
+      <View style={styles.campoContainer}>
+        <Text style={styles.label}>Senha</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite sua senha"
+          secureTextEntry
+          value={senha}
+          onChangeText={setSenha}
+        />
+        {erros.senha && <Text style={styles.erro}>{erros.senha}</Text>}
+      </View>
 
       {/* Botão de login */}
       <TouchableOpacity style={styles.botaoEntrar} onPress={handleLogin}>
@@ -94,13 +135,21 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     fontStyle: 'italic',
   },
+  campoContainer: {
+    width: '100%',
+    marginBottom: 10,
+  },
+  label: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 5,
+  },
   input: {
     width: '100%',
     height: 40,
     borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 5,
-    marginBottom: 10,
     paddingHorizontal: 10,
     backgroundColor: '#fff',
   },
@@ -127,6 +176,11 @@ const styles = StyleSheet.create({
     color: '#ff9800',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  erro: {
+    color: 'red',
+    fontSize: 14,
+    marginTop: 5,
   },
 });
 
