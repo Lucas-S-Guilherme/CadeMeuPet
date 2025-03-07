@@ -1,8 +1,8 @@
 const Avistamento = require('../models/Avistamento');
 
 const criarAvistamento = (req, res) => {
-  const { animal_id, foto, localizacao, observacoes, data_avistamento, usuario_id } = req.body;
-  Avistamento.criar(animal_id, foto, localizacao, observacoes, data_avistamento, usuario_id, (err, results) => {
+  const { animal_id, localizacao, observacoes, data_avistamento, usuario_id } = req.body;
+  Avistamento.criar(animal_id, localizacao, observacoes, data_avistamento, usuario_id, (err, results) => {
     if (err) {
       return res.status(500).json({ success: false, message: 'Erro no servidor.' });
     }
@@ -20,7 +20,6 @@ const buscarAvistamentosPorAnimal = (req, res) => {
   });
 };
 
-// Exporte as funções corretamente
 module.exports = {
   criarAvistamento,
   buscarAvistamentosPorAnimal,

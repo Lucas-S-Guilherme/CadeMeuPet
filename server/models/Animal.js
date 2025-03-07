@@ -1,12 +1,12 @@
 const db = require('../config/db');
 
 class Animal {
-  static criar(nome, tipo, foto, descricao, status, ultima_localizacao, nome_dono, contato_dono, usuario_id, callback) {
+  static criar(nome, tipo, descricao, status, ultima_localizacao, nome_dono, contato_dono, usuario_id, callback) {
     const query = `
-      INSERT INTO Animais (nome, tipo, foto, descricao, status, ultima_localizacao, nome_dono, contato_dono, usuario_id)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO Animais (nome, tipo, descricao, status, ultima_localizacao, nome_dono, contato_dono, usuario_id)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    db.query(query, [nome, tipo, foto, descricao, status, ultima_localizacao, nome_dono, contato_dono, usuario_id], callback);
+    db.query(query, [nome, tipo, descricao, status, ultima_localizacao, nome_dono, contato_dono, usuario_id], callback);
   }
 
   static buscarTodos(callback) {

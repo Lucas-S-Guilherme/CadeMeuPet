@@ -1,29 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView, Image, TouchableOpacity } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
+import { Picker } from '@react-native-picker/picker'; // Importe o Picker
 import api from '../services/api';
 
 const CadastroAnimalPerdido = ({ navigation }) => {
   const [nome, setNome] = useState('');
-  const [tipo, setTipo] = useState('');
-  const [foto, setFoto] = useState(null); // Inicialize como null
+  const [tipo, setTipo] = useState('cachorro'); // Valor inicial do dropdown
   const [descricao, setDescricao] = useState('');
   const [ultimaLocalizacao, setUltimaLocalizacao] = useState('');
   const [nomeDono, setNomeDono] = useState('');
   const [contatoDono, setContatoDono] = useState('');
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      setFoto({ uri: result.uri }); // Atualiza com a nova imagem
-    }
-  };
 
   const handleCadastro = async () => {
     if (!nome || !tipo || !descricao || !ultimaLocalizacao || !nomeDono || !contatoDono) {
@@ -31,34 +17,25 @@ const CadastroAnimalPerdido = ({ navigation }) => {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('nome', nome);
-    formData.append('tipo', tipo);
+    const dados = {
+      nome,
+      tipo,
+      descricao,
+      status: 'perdido',
+      ultima_localizacao: ultimaLocalizacao,
+      nome_dono: nomeDono,
+      contato_dono: contatoDono,
+      usuario_id: 1, // Substitua pelo ID do usuário logado
+    };
 
-    // Verifica se a foto é uma imagem selecionada
-    if (foto && foto.uri) {
-      formData.append('foto', {
-        uri: foto.uri,
-        name: 'foto.jpg',
-        type: 'image/jpeg',
-      });
-    }
-
-    formData.append('descricao', descricao);
-    formData.append('status', 'perdido');
-    formData.append('ultima_localizacao', ultimaLocalizacao);
-    formData.append('nome_dono', nomeDono);
-    formData.append('contato_dono', contatoDono);
-    formData.append('usuario_id', 1); // Substitua pelo ID do usuário logado
-
-    console.log('Dados do FormData:', formData); // Log dos dados do FormData
+    console.log('Dados enviados:', dados); // Log dos dados
 
     try {
       console.log('Enviando requisição para o backend...'); // Log antes de enviar a requisição
 
-      const response = await api.post('/animais', formData, {
+      const response = await api.post('/animais', dados, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json', // Envia como JSON
         },
       });
 
@@ -97,23 +74,19 @@ const CadastroAnimalPerdido = ({ navigation }) => {
         onChangeText={setNome}
       />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Tipo do Animal (ex: Cachorro, Gato, Papagaio)"
-        value={tipo}
-        onChangeText={setTipo}
-      />
-
-      <TouchableOpacity style={styles.botaoFoto} onPress={pickImage}>
-        <Text style={styles.textoBotaoFoto}>Selecionar Foto</Text>
-      </TouchableOpacity>
-
-      {/* Verifica se foto é válida antes de usar */}
-      {foto ? (
-        <Image source={{ uri: foto.uri }} style={styles.foto} />
-      ) : (
-        <Image source={require('../../assets/images/pets.jpeg')} style={styles.foto} />
-      )}
+      {/* Dropdown para o tipo do animal */}
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={tipo}
+          onValueChange={(itemValue) => setTipo(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="Cachorro" value="cachorro" />
+          <Picker.Item label="Gato" value="gato" />
+          <Picker.Item label="Papagaio" value="papagaio" />
+          <Picker.Item label="Outro" value="outro" />
+        </Picker>
+      </View>
 
       <TextInput
         style={styles.input}
@@ -174,23 +147,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: '#fff',
   },
-  botaoFoto: {
-    backgroundColor: '#ff9800',
-    padding: 10,
+  pickerContainer: {
+    borderColor: '#ccc',
+    borderWidth: 1,
     borderRadius: 5,
-    alignItems: 'center',
     marginBottom: 10,
+    backgroundColor: '#fff',
   },
-  textoBotaoFoto: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  foto: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    marginBottom: 10,
-    alignSelf: 'center',
+  picker: {
+    width: '100%',
+    height: 40,
   },
   botaoSalvar: {
     backgroundColor: '#ff9800',
