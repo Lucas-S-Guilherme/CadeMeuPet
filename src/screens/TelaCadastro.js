@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity, Image } from 'react-native';
 import api from '../services/api';
 
 const TelaCadastro = ({ navigation }) => {
@@ -33,8 +33,22 @@ const TelaCadastro = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
+      {/* Logo */}
+      <Image
+        source={require('../../assets/images/logocaramelo.jpeg')} // Substitua pelo caminho correto da sua logo
+        style={styles.logo}
+      />
+
+      {/* Título */}
       <Text style={styles.titulo}>Cadastro</Text>
+
+      {/* Frase motivacional */}
+      <Text style={styles.fraseMotivacional}>
+        Junte-se a nós e ajude a reunir pets com seus donos!
+      </Text>
+
+      {/* Campos do formulário */}
       <TextInput
         style={styles.input}
         placeholder="Nome"
@@ -67,28 +81,69 @@ const TelaCadastro = ({ navigation }) => {
         value={telefone}
         onChangeText={setTelefone}
       />
-      <Button title="Cadastrar" onPress={handleCadastro} />
-    </View>
+
+      {/* Botão de cadastro */}
+      <TouchableOpacity style={styles.botaoCadastrar} onPress={handleCadastro}>
+        <Text style={styles.textoBotaoCadastrar}>Cadastrar</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#f9f9f9',
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    marginBottom: 20,
+    borderRadius: 60,
   },
   titulo: {
-    fontSize: 24,
-    marginBottom: 20,
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 10,
+  },
+  fraseMotivacional: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 30,
+    fontStyle: 'italic',
   },
   input: {
-    width: '80%',
+    width: '100%',
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#ccc',
     borderWidth: 1,
+    borderRadius: 5,
     marginBottom: 10,
     paddingHorizontal: 10,
+    backgroundColor: '#fff',
+  },
+  botaoCadastrar: {
+    width: '100%',
+    backgroundColor: '#ff9800', // Tom de laranja igual ao da tela inicial
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 10,
+    elevation: 3, // Sombra no Android
+    shadowColor: '#000', // Sombra no iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+  },
+  textoBotaoCadastrar: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 
