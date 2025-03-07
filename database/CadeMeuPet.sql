@@ -18,6 +18,8 @@ VALUES
 ('Maria Oliveira', 'maria.oliveira@example.com', 'senha456', '11912345678', NULL, NOW()),
 ('Carlos Souza', 'carlos.souza@example.com', 'senha789', '11955554444', NULL, NOW());
 
+#SELECT * FROM Usuarios;
+
 CREATE TABLE Animais (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,

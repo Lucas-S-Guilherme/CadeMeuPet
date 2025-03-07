@@ -8,13 +8,17 @@ const TelaLogin = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-      const response = await api.post('/api/login', { email, senha });
+      const response = await api.post('/login', { email, senha });
+      console.log('Resposta da API:', response.data); // Log da resposta
+
       if (response.data.success) {
-        navigation.navigate('Home');
+        Alert.alert('Sucesso', 'Login realizado com sucesso!');
+        navigation.navigate('Home'); // Redireciona para a tela inicial
       } else {
         Alert.alert('Erro', 'E-mail ou senha incorretos.');
       }
     } catch (error) {
+      console.error('Erro na requisição:', error); // Log do erro
       Alert.alert('Erro', 'Ocorreu um erro ao tentar fazer login.');
     }
   };

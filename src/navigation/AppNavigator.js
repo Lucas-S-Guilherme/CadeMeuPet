@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import TelaInicial from '../screens/TelaInicial';
 import TelaLogin from '../screens/TelaLogin';
 import TelaCadastro from '../screens/TelaCadastro';
+import Home from '../screens/Home';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,11 @@ export default function AppNavigator() {
         name="TelaCadastro"
         component={TelaCadastro}
         options={{ title: 'Cadastro' }}
+      />
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{ title: 'Home' }}
       />
     </Stack.Navigator>
   );
