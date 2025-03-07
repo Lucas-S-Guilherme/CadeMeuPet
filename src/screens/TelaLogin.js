@@ -28,30 +28,38 @@ const TelaLogin = ({ navigation }) => {
   };
 
   const handleLogin = async () => {
-    if (!validarCampos()) {
+    if (!email || !senha) {
+      Alert.alert('Erro', 'Por favor, preencha e-mail e senha.');
       return;
     }
 
     try {
+      // Faz a chamada para o backend
       const response = await api.post('/login', { email, senha });
-      console.log('Resposta da API:', response.data); // Log da resposta
 
+      // Se chegou aqui sem cair no catch, o status foi 200
+      // Vamos checar se success é true
       if (response.data.success) {
+        // Login bem-sucedido
         Alert.alert('Sucesso', 'Login realizado com sucesso!');
-        navigation.navigate('Home'); // Redireciona para a tela inicial
+        // Exemplo de navegação
+        navigation.navigate('Home');
       } else {
-        // Verifica se o erro é de e-mail ou senha
-        if (response.data.message === 'E-mail não encontrado') {
-          setErros({ email: 'E-mail não cadastrado.' });
-        } else if (response.data.message === 'Senha incorreta') {
-          setErros({ senha: 'Senha incorreta.' });
-        } else {
-          Alert.alert('Erro', 'Ocorreu um erro ao tentar fazer login.');
-        }
+        // Caso especial: se o backend retornar status 200 e success=false
+        // (não é nosso caso agora, mas fica de exemplo)
+        Alert.alert('Erro', response.data.message || 'Falha ao fazer login');
       }
     } catch (error) {
-      console.error('Erro na requisição:', error); // Log do erro
-      Alert.alert('Erro', 'Ocorreu um erro ao tentar fazer login.');
+      console.log('Erro no login:', error);
+
+      // Se o backend retornou 401 ou 500, cai aqui
+      if (error.response) {
+        // Exibimos a mensagem que veio do servidor
+        Alert.alert('Erro', error.response.data.message || 'Erro ao fazer login');
+      } else {
+        // Se nem resposta teve (problema de rede, etc.)
+        Alert.alert('Erro', 'Ocorreu um erro na conexão.');
+      }
     }
   };
 
