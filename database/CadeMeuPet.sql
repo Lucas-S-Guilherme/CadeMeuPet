@@ -16,7 +16,8 @@ INSERT INTO Usuarios (nome, email, senha, telefone, token_recuperacao, created_a
 VALUES
 ('João Silva', 'joao.silva@example.com', 'senha123', '11987654321', NULL, NOW()),
 ('Maria Oliveira', 'maria.oliveira@example.com', 'senha456', '11912345678', NULL, NOW()),
-('Carlos Souza', 'carlos.souza@example.com', 'senha789', '11955554444', NULL, NOW());
+('Carlos Souza', 'carlos.souza@example.com', 'senha789', '11955554444', NULL, NOW()),
+('teste', 'teste@mail', '1234', '990707070', NULL, NOW());
 
 #SELECT * FROM Usuarios;
 
