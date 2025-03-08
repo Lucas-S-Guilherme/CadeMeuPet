@@ -26,8 +26,9 @@ Este projeto tem como objetivo auxiliar na busca por animais perdidos, fornecend
 1. **Clonar este repositório**:
    ```bash
    git clone https://github.com/seu-usuario/CadeMeuPet.git
+   ```
 
-Instalar dependências:
+2. **Instalar dependências:**
 
     Na pasta raiz do projeto (onde está o app React Native e o arquivo package.json), execute:
 
