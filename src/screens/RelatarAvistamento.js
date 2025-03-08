@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../services/api';
 
@@ -12,17 +12,53 @@ const RelatarAvistamento = () => {
   const [observacoes, setObservacoes] = useState('');
   const [dataAvistamento, setDataAvistamento] = useState('');
 
+  // Função para validar e formatar a data
+  const formatarData = (data) => {
+    // Remove caracteres não numéricos
+    const dataLimpa = data.replace(/\D/g, '');
+
+    // Aplica a máscara de data (dia/mês/ano)
+    let dataFormatada = '';
+    if (dataLimpa.length > 0) {
+      dataFormatada += dataLimpa.slice(0, 2); // Dia
+    }
+    if (dataLimpa.length > 2) {
+      dataFormatada += `/${dataLimpa.slice(2, 4)}`; // Mês
+    }
+    if (dataLimpa.length > 4) {
+      dataFormatada += `/${dataLimpa.slice(4, 8)}`; // Ano
+    }
+
+    return dataFormatada;
+  };
+
+  // Função para converter a data de PT-BR para YYYY-MM-DD
+  const converterDataParaBackend = (data) => {
+    const [dia, mes, ano] = data.split('/');
+    return `${ano}-${mes}-${dia}`;
+  };
+
   const handleRelatarAvistamento = async () => {
     if (!localizacao || !observacoes || !dataAvistamento) {
       Alert.alert('Erro', 'Todos os campos são obrigatórios.');
       return;
     }
 
+    // Valida se a data está no formato correto
+    const regexData = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!regexData.test(dataAvistamento)) {
+      Alert.alert('Erro', 'Por favor, insira uma data válida no formato DD/MM/AAAA.');
+      return;
+    }
+
+    // Converte a data para o formato YYYY-MM-DD
+    const dataBackend = converterDataParaBackend(dataAvistamento);
+
     const dados = {
       animal_id: animal.id,
       localizacao,
       observacoes,
-      data_avistamento: dataAvistamento,
+      data_avistamento: dataBackend,
       usuario_id: 1, // Substitua pelo ID do usuário logado
     };
 
@@ -62,9 +98,11 @@ const RelatarAvistamento = () => {
 
       <TextInput
         style={styles.input}
-        placeholder="Data do Avistamento (YYYY-MM-DD)"
+        placeholder="Data do Avistamento (DD/MM/AAAA)"
         value={dataAvistamento}
-        onChangeText={setDataAvistamento}
+        onChangeText={(text) => setDataAvistamento(formatarData(text))} // Aplica a formatação
+        keyboardType="numeric"
+        maxLength={10} // Limita o tamanho do campo
       />
 
       <TouchableOpacity style={styles.botaoSalvar} onPress={handleRelatarAvistamento}>
@@ -117,4 +155,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RelatarAvistamento;
+export default RelatarAvistamento;10
