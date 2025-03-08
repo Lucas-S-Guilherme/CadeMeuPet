@@ -82,7 +82,7 @@ const CarrosselAnimais = ({ onRelatarAvistamento }) => {
 
     return (
       <View style={styles.card}>
-        <Image source={{ uri: item.imagem }} style={styles.imagemAnimal} />
+        <Image source={require('../../assets/images/logocaramelo.jpeg')} style={styles.imagemAnimal} />
         <Text style={styles.nomeAnimal}>{item.nome || 'Nome não disponível'}</Text>
         <Text style={styles.localAnimal}>{item.endereco || 'Endereço não disponível'}</Text>
         <Text style={styles.descricaoAnimal}>{item.descricao || 'Descrição não disponível'}</Text>
@@ -96,7 +96,12 @@ const CarrosselAnimais = ({ onRelatarAvistamento }) => {
           style={styles.botaoMapa}
           onPress={() =>
             navigation.navigate('Mapa', {
-              localizacao: { latitude, longitude },
+              initialRegion: {
+                latitude: latitude,
+                longitude: longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              },
             })
           }
         >

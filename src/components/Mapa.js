@@ -1,24 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-const Mapa = ({ initialRegion, onLocationSelect }) => {
+const Mapa = ({ route, initialRegion }) => {
   const [selectedLocation, setSelectedLocation] = useState(initialRegion);
 
-  const handleMapPress = (event) => {
-    const { coordinate } = event.nativeEvent;
-    setSelectedLocation(coordinate);
-    if (onLocationSelect) {
-      onLocationSelect(coordinate); // Passa a localização selecionada para o componente pai
+  useEffect(() => {
+    if (route?.params?.initialRegion) {
+      setSelectedLocation(route.params.initialRegion);
+    } else if (initialRegion) {
+      setSelectedLocation(initialRegion);
     }
-  };
+  }, [route, initialRegion]);
 
   return (
     <View style={styles.container}>
       <MapView
         style={styles.map}
-        initialRegion={initialRegion}
-        onPress={handleMapPress}
+        initialRegion={selectedLocation}
       >
         {selectedLocation && (
           <Marker
