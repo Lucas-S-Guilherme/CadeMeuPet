@@ -6,6 +6,14 @@ import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
+// Lista de imagens disponíveis
+const imagensAnimais = [
+  require('../../assets/images/thor.jpg'),
+  require('../../assets/images/pets.jpeg'),
+  require('../../assets/images/minha.jpg'),
+  require('../../assets/images/bolinha.jpeg'),
+];
+
 const CarrosselAnimais = ({ onRelatarAvistamento }) => {
   const [animaisDesaparecidos, setAnimaisDesaparecidos] = useState([]);
   const [carregando, setCarregando] = useState(true);
@@ -17,14 +25,16 @@ const CarrosselAnimais = ({ onRelatarAvistamento }) => {
       try {
         const response = await api.get('/animais');
         if (response.data.success) {
-          // Para cada animal, buscar o endereço formatado
+          // Para cada animal, buscar o endereço formatado e associar uma imagem aleatória
           const animaisComEndereco = await Promise.all(
             response.data.animais.map(async (animal) => {
               const [latitude, longitude] = animal.ultima_localizacao.split(',').map(Number);
               const endereco = await buscarEndereco(latitude, longitude);
+              const imagem = imagensAnimais[Math.floor(Math.random() * imagensAnimais.length)]; // Escolhe uma imagem aleatória
               return {
                 ...animal,
                 endereco: endereco || 'Endereço não disponível',
+                imagem,
               };
             })
           );
@@ -82,7 +92,7 @@ const CarrosselAnimais = ({ onRelatarAvistamento }) => {
 
     return (
       <View style={styles.card}>
-        <Image source={require('../../assets/images/logocaramelo.jpeg')} style={styles.imagemAnimal} />
+        <Image source={item.imagem} style={styles.imagemAnimal} />
         <Text style={styles.nomeAnimal}>{item.nome || 'Nome não disponível'}</Text>
         <Text style={styles.localAnimal}>{item.endereco || 'Endereço não disponível'}</Text>
         <Text style={styles.descricaoAnimal}>{item.descricao || 'Descrição não disponível'}</Text>
