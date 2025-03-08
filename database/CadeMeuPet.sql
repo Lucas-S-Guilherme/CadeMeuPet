@@ -16,8 +16,7 @@ INSERT INTO Usuarios (nome, email, senha, telefone, token_recuperacao, created_a
 VALUES
 ('João Silva', 'joao.silva@example.com', 'senha123', '11987654321', NULL, NOW()),
 ('Maria Oliveira', 'maria.oliveira@example.com', 'senha456', '11912345678', NULL, NOW()),
-('Carlos Souza', 'carlos.souza@example.com', 'senha789', '11955554444', NULL, NOW()),
-('teste', 'teste@mail', '1234', '990707070', NULL, NOW());
+('Carlos Souza', 'carlos.souza@example.com', 'senha789', '11955554444', NULL, NOW());
 
 #SELECT * FROM Usuarios;
 
@@ -36,12 +35,14 @@ CREATE TABLE Animais (
     FOREIGN KEY (usuario_id) REFERENCES Usuarios(id)
 );
 
+# SELECT * FROM Animais;
+
 # para foto: LOAD_FILE('/caminho/para/foto_rex.jpg'),
 INSERT INTO Animais (nome, tipo, descricao, status, ultima_localizacao, nome_dono, contato_dono, usuario_id, created_at)
 VALUES
-('Rex', 'cachorro',  'Cachorro da raça Labrador, cor preta.', 'perdido', 'Rua das Flores, 123', 'Ana Costa', '11999998888', 1, NOW()),
-('Mimi', 'gato', 'Gato siamês, muito dócil.', 'encontrado', 'Avenida Paulista, 1000', 'Joaozinho', '69990707070', 2, NOW()),
-('Loro', 'papagaio', 'Papagaio verde, fala algumas palavras.', 'em_processo_adocao', 'Praça da Sé, 50', 'Pedro Alves', '11988887777', 3, NOW());
+('Rex', 'cachorro',  'Cachorro da raça Labrador, cor preta.', 'perdido', '-10.88502472534210, -61.95037863421845', 'Ana Costa', '11999998888', 1, NOW()),
+('Mimi', 'gato', 'Gato siamês, muito dócil.', 'encontrado', '-10.88650301810705, -61.94897262041230', 'Joaozinho', '69990707070', 2, NOW()),
+('Loro', 'papagaio', 'Papagaio verde, fala algumas palavras.', 'em_processo_adocao', '-10.88389741284572, -61.95211451360512', 'Pedro Alves', '11988887777', 3, NOW());
 
 CREATE TABLE Avistamentos (
     id INT AUTO_INCREMENT PRIMARY KEY,

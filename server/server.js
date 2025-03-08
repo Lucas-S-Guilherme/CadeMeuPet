@@ -5,8 +5,7 @@ const authRoutes = require('./routes/authRoutes');
 const animalRoutes = require('./routes/animalRoutes');
 const avistamentoRoutes = require('./routes/avistamentoRoutes');
 const getLocalIP = require('./getLocalIP'); // Importa o script que pega o IP local
-
-
+const geocodificacaoRoutes = require('./routes/geocodificacaoRoutes'); // Importe o novo roteador
 
 const app = express();
 const port = 3000;
@@ -22,6 +21,7 @@ app.use(bodyParser.json());
 app.use('/api', authRoutes);
 app.use('/api', animalRoutes);
 app.use('/api', avistamentoRoutes);
+app.use('/api', geocodificacaoRoutes); // Adicione o endpoint
 
 app.get('/api/get-ip', (req, res) => {
     res.json({ ip: getLocalIP() });

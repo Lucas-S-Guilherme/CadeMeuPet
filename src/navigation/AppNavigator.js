@@ -6,6 +6,7 @@ import TelaCadastro from '../screens/TelaCadastro';
 import Home from '../screens/Home';
 import CadastroAnimalPerdido from '../screens/CadastroAnimalPerdido'; // Importe a tela CadastroAnimalPerdido
 import RelatarAvistamento from '../screens/RelatarAvistamento.js';
+import Mapa from '../components/Mapa.js';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,11 @@ export default function AppNavigator() {
         name="RelatarAvistamento"
         component={RelatarAvistamento}
         options={{ title: 'Relatar Avistamento' }}
+      />
+      <Stack.Screen
+      name="Mapa"
+      component={Mapa}
+      options={{ title: 'Mapa' }}
       />
     </Stack.Navigator>
   );
