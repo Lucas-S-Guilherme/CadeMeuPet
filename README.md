@@ -30,33 +30,26 @@ Este projeto tem como objetivo auxiliar na busca por animais perdidos, fornecend
 
 2. **Instalar dependências:**
 
-    Na pasta raiz do projeto (onde está o app React Native e o arquivo package.json), execute:
+    Na pasta raiz do projeto (onde está o app React Native e o arquivo package.json), execute: 
+    
+    ´´´bash
+    npm install
+    ´´´
 
-npm install
+3. **Executar o servidor:**
 
-ou
+    Na /server onde se encontra o arquivo server.js, rode:
 
-yarn
-
-Em seguida, na pasta do servidor, se houver um package.json separado, instale também:
-
-npm install
-
-ou
-
-    yarn
-
-Executar o servidor:
-
-    Na pasta onde se encontra o arquivo server.js, rode:
-
+    ´´´bash
     node server.js
+    ´´´
 
     Verifique se o servidor está rodando na porta configurada (por padrão, 3000).
 
-Executar o aplicativo:
+4. **Executar o aplicativo:**
 
     Volte à pasta raiz do projeto (onde estão os arquivos do Expo) e execute:
-
-npx expo start
-
+    
+    ´´´bash
+    npx expo start
+    ´´´
