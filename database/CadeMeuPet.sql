@@ -55,6 +55,9 @@ CREATE TABLE Avistamentos (
     FOREIGN KEY (animal_id) REFERENCES Animais(id),
     FOREIGN KEY (usuario_id) REFERENCES Usuarios(id)
 );
+
+#SELECT * FROM Avistamentos;
+
 # caminho para propriedade foto: LOAD_FILE('/caminho/para/foto_avistamento_rex.jpg'),
 
 INSERT INTO Avistamentos (animal_id, localizacao, observacoes, data_avistamento, usuario_id, created_at)

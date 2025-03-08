@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-picker/picker'; // Importe o Picker
+import { Picker } from '@react-native-picker/picker';
+import Mapa from '../components/Mapa'; // Importe o componente Mapa
 import api from '../services/api';
 
 const CadastroAnimalPerdido = ({ navigation }) => {
   const [nome, setNome] = useState('');
-  const [tipo, setTipo] = useState(''); // Estado inicial vazio
+  const [tipo, setTipo] = useState('');
   const [descricao, setDescricao] = useState('');
   const [ultimaLocalizacao, setUltimaLocalizacao] = useState('');
   const [nomeDono, setNomeDono] = useState('');
   const [contatoDono, setContatoDono] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
+  const handleLocationSelect = (coordinate) => {
+    setSelectedLocation(coordinate);
+    setUltimaLocalizacao(`${coordinate.latitude}, ${coordinate.longitude}`);
+  };
 
   const handleCadastro = async () => {
-    if (!nome || !tipo || !descricao || !ultimaLocalizacao || !nomeDono || !contatoDono) {
+    if (!nome || !tipo || !descricao || !selectedLocation || !nomeDono || !contatoDono) {
       Alert.alert('Erro', 'Todos os campos são obrigatórios.');
       return;
     }
@@ -22,25 +29,14 @@ const CadastroAnimalPerdido = ({ navigation }) => {
       tipo,
       descricao,
       status: 'perdido',
-      ultima_localizacao: ultimaLocalizacao,
+      ultima_localizacao: `${selectedLocation.latitude}, ${selectedLocation.longitude}`,
       nome_dono: nomeDono,
       contato_dono: contatoDono,
       usuario_id: 1, // Substitua pelo ID do usuário logado
     };
 
-    console.log('Dados enviados:', dados); // Log dos dados
-
     try {
-      console.log('Enviando requisição para o backend...'); // Log antes de enviar a requisição
-
-      const response = await api.post('/animais', dados, {
-        headers: {
-          'Content-Type': 'application/json', // Envia como JSON
-        },
-      });
-
-      console.log('Resposta da API:', response.data); // Log da resposta da API
-
+      const response = await api.post('/animais', dados);
       if (response.data.success) {
         Alert.alert('Sucesso', 'Animal cadastrado com sucesso!');
         navigation.navigate('Home');
@@ -48,17 +44,7 @@ const CadastroAnimalPerdido = ({ navigation }) => {
         Alert.alert('Erro', 'Ocorreu um erro ao cadastrar o animal.');
       }
     } catch (error) {
-      console.error('Erro na requisição:', error); // Log do erro completo
-      if (error.response) {
-        // Erro com resposta do servidor
-        console.error('Resposta do servidor:', error.response.data);
-      } else if (error.request) {
-        // Erro sem resposta do servidor
-        console.error('Sem resposta do servidor:', error.request);
-      } else {
-        // Outros erros
-        console.error('Erro ao configurar a requisição:', error.message);
-      }
+      console.error('Erro na requisição:', error);
       Alert.alert('Erro', 'Ocorreu um erro ao tentar cadastrar o animal.');
     }
   };
@@ -74,14 +60,13 @@ const CadastroAnimalPerdido = ({ navigation }) => {
         onChangeText={setNome}
       />
 
-      {/* Dropdown para o tipo do animal */}
       <View style={styles.pickerContainer}>
         <Picker
           selectedValue={tipo}
           onValueChange={(itemValue) => setTipo(itemValue)}
           style={styles.picker}
         >
-          <Picker.Item label="Selecione o tipo de animal" value="" /> {/* Placeholder */}
+          <Picker.Item label="Selecione o tipo de animal" value="" />
           <Picker.Item label="Cachorro" value="cachorro" />
           <Picker.Item label="Gato" value="gato" />
           <Picker.Item label="Papagaio" value="papagaio" />
@@ -99,13 +84,6 @@ const CadastroAnimalPerdido = ({ navigation }) => {
 
       <TextInput
         style={styles.input}
-        placeholder="Última Localização"
-        value={ultimaLocalizacao}
-        onChangeText={setUltimaLocalizacao}
-      />
-
-      <TextInput
-        style={styles.input}
         placeholder="Nome do Dono"
         value={nomeDono}
         onChangeText={setNomeDono}
@@ -117,6 +95,19 @@ const CadastroAnimalPerdido = ({ navigation }) => {
         value={contatoDono}
         onChangeText={setContatoDono}
       />
+
+      {/* Mapa para selecionar a localização */}
+      <View style={styles.mapaContainer}>
+        <Mapa
+          initialRegion={{
+            latitude: -10.8817, // Latitude de Ji-Paraná
+            longitude: -61.9518, // Longitude de Ji-Paraná
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+          onLocationSelect={handleLocationSelect}
+        />
+      </View>
 
       <TouchableOpacity style={styles.botaoSalvar} onPress={handleCadastro}>
         <Text style={styles.textoBotaoSalvar}>Salvar</Text>
@@ -158,6 +149,11 @@ const styles = StyleSheet.create({
   picker: {
     width: '100%',
     height: 50,
+  },
+  mapaContainer: {
+    width: '100%',
+    height: 300, // Altura do mapa
+    marginBottom: 10,
   },
   botaoSalvar: {
     backgroundColor: '#ff9800',
